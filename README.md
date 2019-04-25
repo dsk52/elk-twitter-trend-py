@@ -22,8 +22,12 @@ $ docker pull nshou/elasticsearch-kibana
 ### Python
 
 ```
+<<<<<<< HEAD
 $ python3 -m venv venv
 $ source venv/bin/activate.fish
+=======
+$ source ./bin/activate
+>>>>>>> 19082c80c5387fc52740cf074dee17afd6eea03a
 $ pip install -r requirements.txt
 ```
 
@@ -43,4 +47,7 @@ $ docker run -d --name elk-twitter-trend -p 9200:9200 -p 5601:5601 nshou/elastic
 $ python trend_stream.py
 ```
 
+<<<<<<< HEAD
 Access http://localhost:5601
+=======
+>>>>>>> 19082c80c5387fc52740cf074dee17afd6eea03a
