@@ -1,7 +1,6 @@
 from pytz import timezone
 from dateutil import parser
 # from datetime import datetime
-from elasticsearch import Elasticsearch
 from twitter import Twitter, TwitterStream, OAuth
 from _thread import get_ident
 from threading import Timer
@@ -9,7 +8,7 @@ from threading import Timer
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-
+from ElastincsearchProvider import ElastincsearchProvider
 
 # 環境変数の読み込み
 dotenv_path = join(dirname(__file__), '.env')
@@ -36,7 +35,7 @@ class TwitterTrendStream():
     def __init__(self):
         self.__current_trend_ident = None
         self.__oauth = OAuth(**OAUTH_INFO)
-        self.__es = Elasticsearch()
+        self.__es = ElastincsearchProvider()
 
     def __fetch_trends(self, twitter):
         response = twitter.trends.place(_id=WOEID_JP)
@@ -47,6 +46,7 @@ class TwitterTrendStream():
         return twitter_stream.statuses.filter(track=track)
 
     def run(self):
+        print('run...')
         self.__current_trend_ident = get_ident()  # 今動作しているスレッドIDをセット
         Timer(300, self.run).start()
 
@@ -70,7 +70,7 @@ class TwitterTrendStream():
                         'text': tweet['text'],
                         'created_at': str(parser.parse(tweet['created_at']).astimezone(JST).isoformat())
                     }
-                    self.__es.index(index="testindex", doc_type='tweet', body=doc)
+                    self.__es.set(body=doc)
 
 
 if __name__ == '__main__':
